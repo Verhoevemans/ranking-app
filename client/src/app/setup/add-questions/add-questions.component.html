@@ -1,0 +1,46 @@
+<ng-container *ngIf="active; else viewTemplate">
+  <p>
+    What are the questions that participants should be ranked on? You can create a game
+    with only custom questions. Or you can create a game with only predefined questions.
+    Or you can make a combination of predefined and custom questions.
+
+    When going for predefined questions, it helps to pick a setting. You don't want to play
+    a family game and ask "who is the biggest slut". You don't want to play a game with colleagues
+    and ask "who's farts stink the worst". The setting determines the questions. Pick a setting,
+    and the predefined questions will be suggested accordingly.
+  </p>
+  <form [formGroup]="questionsForm">
+    <div class="form-group">
+      <label for="theme">Theme:</label>
+      <select class="form-control" id="theme">
+        <option>
+          Select...
+        </option>
+        <option>
+          Work Colleagues - Office Appropriate
+        </option>
+        <option>
+          Work Colleagues - Edgy
+        </option>
+        <option>
+          Family - All Ages
+        </option>
+        <option>
+          Friends - Friendly
+        </option>
+        <option>
+          Friends - Edgy
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="question">Question 1:</label>
+      <input type="text" class="form-control" id="question">
+    </div>
+  </form>
+</ng-container>
+
+<ng-template #viewTemplate>
+  <p><!-- TODO: here comes the data that users already entered --></p>
+</ng-template>

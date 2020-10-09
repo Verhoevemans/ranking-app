@@ -1,0 +1,10 @@
+<ng-container *ngIf="active; else viewTemplate">
+  <p>
+    Congratulations! Your game is setup, and invitations have been sent to all participants.
+    Good luck and have fun with the game!
+  </p>
+</ng-container>
+
+<ng-template #viewTemplate>
+  <p><!-- TODO: here comes the data that users already entered --></p>
+</ng-template>

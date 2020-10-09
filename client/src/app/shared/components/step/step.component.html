@@ -1,0 +1,34 @@
+<section class="step-header"
+         [ngClass]="{ 'inactive': config.status !== 'active' }"
+         (click)="onStepClicked()">
+  <span class="header-counter">
+    {{ index + 1}}
+  </span>
+  <h5>
+    Step {{ index + 1 }}: {{ config.title }}
+  </h5>
+</section>
+<section class="step-body" [ngClass]="{ 'inactive': config.status !== 'active' }">
+
+  <!--<ng-content></ng-content>-->
+
+  <ng-template stepPlaceholder></ng-template>
+
+  <div class="row step-btn-active" *ngIf="config.status === 'active' && !config.isLast">
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="onNextClicked()">
+        Next
+      </button>
+    </div>
+    <div class="col-2" *ngIf="index !== 0">
+      <button class="btn btn-outline-primary" (click)="onPreviousClicked()">
+        Previous
+      </button>
+    </div>
+  </div>
+  <div class="step-btn-inactive" *ngIf="config.status === 'completed' && !config.isLast">
+    <button class="btn btn-outline-secondary" (click)="onStepClicked()">
+      Edit
+    </button>
+  </div>
+</section>

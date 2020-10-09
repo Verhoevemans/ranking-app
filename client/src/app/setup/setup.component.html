@@ -1,0 +1,36 @@
+<h2>
+  Game Setup
+</h2>
+<p>
+  Follow these steps to set up a new game. Once you've completed all steps, the Game will be
+  opened and available for participants to answer the questions. 
+</p>
+<div>
+  <app-stepper>
+    <app-step [index]="0"
+              [config]="stepper.steps[0]"
+              (onNext)="stepper.goToNextStep($event)"
+              (onActivate)="stepper.goToStep($event)">
+      <!--<app-add-participants [active]="stepper.steps[0].status === 'active'"></app-add-participants>-->
+    </app-step>
+    <app-step [index]="1"
+              [config]="stepper.steps[1]"
+              (onNext)="stepper.goToNextStep($event)"
+              (onPrevious)="stepper.goToPreviousStep($event)"
+              (onActivate)="stepper.goToStep($event)">
+      <app-add-questions [active]="stepper.steps[1].status === 'active'"></app-add-questions>
+    </app-step>
+    <app-step [index]="2"
+              [config]="stepper.steps[2]"
+              (onNext)="stepper.goToNextStep($event)"
+              (onPrevious)="stepper.goToPreviousStep($event)"
+              (onActivate)="stepper.goToStep($event)">
+      <app-configuration [active]="stepper.steps[2].status === 'active'"></app-configuration>
+    </app-step>
+    <app-step [index]="3"
+              [config]="stepper.steps[3]"
+              (onActivate)="stepper.goToStep($event)">
+      <app-completed [active]="stepper.steps[3].status === 'active'"></app-completed>
+    </app-step>
+  </app-stepper>
+</div>

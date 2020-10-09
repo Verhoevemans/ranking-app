@@ -1,0 +1,7 @@
+<ng-container *ngIf="active; else viewTemplate">
+  <p>configuration works!</p>
+</ng-container>
+
+<ng-template #viewTemplate>
+  <p><!-- TODO: here comes the data that users already entered --></p>
+</ng-template>

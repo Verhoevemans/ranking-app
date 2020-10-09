@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  margin-bottom: 24px;
+
+  .step-header {
+    display: flex;
+    margin-bottom: 1em;
+    cursor: pointer;
+
+    &.inactive {
+      color: #6c757d;
+
+      .header-counter {
+        background-color: #6c757d;
+      }
+    }
+
+    .header-counter {
+      background-color: #007bff;
+      border-radius: 50%;
+      color: white;
+      height: 2em;
+      margin: 0 18px 0 8px;
+      padding-top: 3px;
+      text-align: center;
+      width: 2em;
+    }
+
+    h5 {
+      padding-top: 2px;
+    }
+  }
+
+  .step-body {
+    border-left: 1px solid #6c757d;
+    margin-left: 24px;
+    padding-left: 2em;
+
+    &.inactive {
+      color: #6c757d;
+      min-height: 30px;
+    }
+
+    button {
+      min-width: 120px;
+    }
+
+    .step-btn-active {
+      padding-bottom: 12px;
+    }
+
+    .step-btn-inactive {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
