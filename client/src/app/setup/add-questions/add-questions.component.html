@@ -1,4 +1,4 @@
-<ng-container *ngIf="active; else viewTemplate">
+<ng-container *ngIf="activeStep; else viewTemplate">
   <p>
     What are the questions that participants should be ranked on? You can create a game
     with only custom questions. Or you can create a game with only predefined questions.
@@ -12,7 +12,9 @@
   <form [formGroup]="questionsForm">
     <div class="form-group">
       <label for="theme">Theme:</label>
-      <select class="form-control" id="theme">
+      <select class="form-control"
+              id="theme"
+              [formControlName]="'theme'">
         <option>
           Select...
         </option>
@@ -36,7 +38,10 @@
 
     <div class="form-group">
       <label for="question">Question 1:</label>
-      <input type="text" class="form-control" id="question">
+      <input type="text"
+             class="form-control"
+             id="question"
+             [formControlName]="'question'">
     </div>
   </form>
 </ng-container>

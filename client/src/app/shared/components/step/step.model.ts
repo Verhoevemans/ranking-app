@@ -1,7 +1,11 @@
+import { EventEmitter } from '@angular/core';
+
 export type StepStatus = 'active' | 'inactive' | 'completed';
 
 export interface StepComponentContent {
-  active: boolean;
+  activeStep: boolean;
+  setActiveStep: (active: boolean) => void;
+  validStep?: EventEmitter<boolean>;
 }
 
 export class Step {

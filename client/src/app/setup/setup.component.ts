@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Step } from '../shared/components/step/step.model';
-import { Stepper } from '../shared/components/stepper/stepper.model';
 import { AddParticipantsComponent } from './add-participants/add-participants.component';
 import { AddQuestionsComponent } from './add-questions/add-questions.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
@@ -13,22 +12,17 @@ import { CompletedComponent } from './completed/completed.component';
 })
 export class SetupComponent implements OnInit {
   
-  stepper: Stepper;
+  steps: Step[];
 
   constructor() { }
 
   ngOnInit(): void {
-    const steps = [
+    this.steps = [
       new Step('Invite players', 'active', AddParticipantsComponent),
       new Step('Add Questions', 'inactive', AddQuestionsComponent),
       new Step('Game Configuration', 'inactive', ConfigurationComponent),
       new Step('Complete Setup', 'inactive', CompletedComponent, true)
-      
-      /*new Step('Add Questions', 'inactive', 'AddQuestionsComponent'),
-      new Step('Game Configuration', 'inactive', 'ConfigurationComponent'),
-      new Step('Complete Setup', 'inactive', 'CompletedComponent', true)*/
     ];
-    this.stepper = new Stepper(steps);
   }
 
 }

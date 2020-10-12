@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { StepComponentContent } from '../../shared/components/step/step.model';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-questions',
@@ -9,8 +9,9 @@ import { FormGroup } from '@angular/forms';
 })
 export class AddQuestionsComponent implements OnInit, StepComponentContent {
   
-  @Input() active: boolean;
+  @Output() validStep = new EventEmitter<boolean>();
   
+  activeStep: boolean;
   questionsForm: FormGroup;
 
   constructor() { }
@@ -19,8 +20,18 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
     this.initializeForm();
   }
   
+  setActiveStep(active: boolean): void {
+    this.activeStep = active;
+  }
+  
   initializeForm(): void {
-    this.questionsForm = new FormGroup({})
+    this.questionsForm = new FormGroup({
+      'theme': new FormControl(null, Validators.required),
+      'question': new FormControl(null, Validators.required)
+    });
+    this.questionsForm.statusChanges.subscribe((status) => {
+      this.validStep.emit(status);
+    })
   }
 
 }

@@ -1,1 +1,9 @@
-<ng-content></ng-content>
+<ng-container *ngFor="let step of steps; let i = index">
+  <app-step [active]="i === activeStepIndex"
+            [index]="i"
+            [step]="step"
+            (onNext)="goToNextStep($event)"
+            (onPrevious)="goToPreviousStep($event)"
+            (onActivate)="goToStep($event)">
+  </app-step>
+</ng-container>

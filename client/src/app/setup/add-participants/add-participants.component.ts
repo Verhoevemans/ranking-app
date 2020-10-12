@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+} from '@angular/core';
 import { StepComponentContent } from '../../shared/components/step/step.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -9,15 +14,19 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AddParticipantsComponent implements OnInit, StepComponentContent {
   
-  //@Input() active: boolean;
-  active: boolean;
+  @Output() validStep = new EventEmitter<boolean>();
   
+  activeStep: boolean;
   participantsForm: FormArray;
 
   constructor() { }
 
   ngOnInit(): void {
     this.initializeForm();
+  }
+  
+  setActiveStep(active: boolean): void {
+    this.activeStep = active;
   }
   
   getParticipantFormGroup(name?, email?): FormGroup {
@@ -30,7 +39,9 @@ export class AddParticipantsComponent implements OnInit, StepComponentContent {
   initializeForm(): void {
     this.participantsForm = new FormArray([]);
     this.participantsForm.push(this.getParticipantFormGroup());
-    
+    this.participantsForm.statusChanges.subscribe((status) => {
+      this.validStep.emit(status);
+    })
   }
   
   onAdd(): void {
