@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { GameService } from '../shared/api/game/game.service';
 import { Step } from '../shared/components/step/step.model';
-import { AddParticipantsComponent } from './add-participants/add-participants.component';
+
+import { AddPlayersComponent } from './add-players/add-players.component';
 import { AddQuestionsComponent } from './add-questions/add-questions.component';
-import { ConfigurationComponent } from './configuration/configuration.component';
 import { CompletedComponent } from './completed/completed.component';
+import { ConfigurationComponent } from './configuration/configuration.component';
 
 @Component({
   selector: 'app-setup',
@@ -14,14 +18,19 @@ export class SetupComponent implements OnInit {
   
   steps: Step[];
 
-  constructor() { }
+  constructor(private gameService: GameService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    if (!this.gameService.getGameId()) {
+      const gameId = this.route.snapshot.paramMap.get('game-id');
+      this.gameService.setGameId(+gameId);
+    }
+    
     this.steps = [
-      new Step('Invite players', 'active', AddParticipantsComponent),
+      new Step('Invite players', 'active', AddPlayersComponent),
       new Step('Add Questions', 'inactive', AddQuestionsComponent),
       new Step('Game Configuration', 'inactive', ConfigurationComponent),
-      new Step('Complete Setup', 'inactive', CompletedComponent, true)
+      new Step('Complete Setup', 'inactive', CompletedComponent, true, true)
     ];
   }
 

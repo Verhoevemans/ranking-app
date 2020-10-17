@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Step } from '../step/step.model';
 
 @Component({
@@ -6,18 +6,14 @@ import { Step } from '../step/step.model';
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss']
 })
-export class StepperComponent implements OnInit {
+export class StepperComponent {
   
   @Input() steps: Step[];
   
   activeStepIndex = 0;
   
-  ngOnInit(): void {
-    console.log('stepper created:', this.steps);
-  }
-  
   goToNextStep(currentActiveStep: number): void {
-    console.log('goToNextStep()');
+    console.log('goToNextStep()', this.steps[this.activeStepIndex].getStepData());
     this.steps[currentActiveStep].status = 'completed';
     this.steps[currentActiveStep + 1].status = 'active';
     this.activeStepIndex = currentActiveStep + 1;

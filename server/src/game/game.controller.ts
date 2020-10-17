@@ -12,7 +12,7 @@ export class GameController {
   test(): string {
     Logger.log('test()');
     
-    return 'this endpoint seems to be working!'
+    return 'endpoint to the game controller'
   }
   
   @Get('get/:id')

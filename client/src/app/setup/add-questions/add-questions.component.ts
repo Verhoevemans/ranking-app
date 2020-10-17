@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { StepComponentContent } from '../../shared/components/step/step.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SetupService } from '../../shared/api/setup/setup.service';
 
 @Component({
   selector: 'app-add-questions',
@@ -9,12 +10,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AddQuestionsComponent implements OnInit, StepComponentContent {
   
-  @Output() validStep = new EventEmitter<boolean>();
+  @Output() contentChanged = new EventEmitter<{ status: string, value: any }>();
   
   activeStep: boolean;
   questionsForm: FormGroup;
 
-  constructor() { }
+  constructor(private setupService: SetupService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -24,13 +25,20 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
     this.activeStep = active;
   }
   
+  saveStepChanges() {
+    const questions = this.questionsForm.value;
+    this.setupService.saveQuestions(questions).subscribe((response) => {
+      console.log('New questions save successfully:', response);
+    })
+  }
+  
   initializeForm(): void {
     this.questionsForm = new FormGroup({
       'theme': new FormControl(null, Validators.required),
       'question': new FormControl(null, Validators.required)
     });
-    this.questionsForm.statusChanges.subscribe((status) => {
-      this.validStep.emit(status);
+    this.questionsForm.valueChanges.subscribe((value) => {
+      this.contentChanged.emit({ status: this.questionsForm.status, value });
     })
   }
 

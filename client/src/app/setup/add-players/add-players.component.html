@@ -3,23 +3,23 @@
     First, setup the participants of the game. Enter their name, which will be used to
     identify the players for ranking purposes (so don't use nicknames that won't be
     recognized, or people won't be ranked properly). Enter their e-mail address, which
-    will be used to invite participants to join the game (so don't make typos or the
-    participants will never receive their invitations).
+    will be used to invite players to join the game (so don't make typos or the
+    players will never receive their invitations).
   </p>
   <form>
     <div class="row justify-content-end">
       <div class="col-3">
         <button type="button" class="btn btn-primary btn-block" (click)="onAdd()">
-          + Add Participant
+          + Add Player
         </button>
       </div>
     </div>
     <div class="row align-items-end"
-         *ngFor="let participant of participantsForm.controls; let i = index">
-      <ng-container [formGroup]="participant">
+         *ngFor="let player of playersForm.controls; let i = index">
+      <ng-container [formGroup]="player">
         <div class="col form-group">
           <label for="name">
-            Participant name:
+            Player name:
           </label>
           <input type="text"
                  class="form-control"
@@ -28,7 +28,7 @@
         </div>
         <div class="col form-group">
           <label for="e-mail">
-            Participant e-mail:
+            Player e-mail:
           </label>
           <input type="text"
                  class="form-control"
@@ -46,10 +46,10 @@
     </div>
   </form>
   <p>
-    Form is valid: {{ participantsForm.valid }}
+    Form is valid: {{ playersForm.valid }}
   </p>
 </ng-container>
 
 <ng-template #viewTemplate>
-  <p><i>Showing all participants</i></p>
+  <p><i>Showing all players</i></p>
 </ng-template>

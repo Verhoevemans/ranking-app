@@ -30,7 +30,6 @@ export class StepComponent implements OnInit, OnChanges {
   @ViewChild(StepDirective, { static: true }) stepPlaceholder: StepDirective;
   
   stepComponent: StepComponentContent;
-  valid: boolean;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
@@ -44,32 +43,41 @@ export class StepComponent implements OnInit, OnChanges {
     }
   }
   
+  saveCurrentChanges(): void {
+    this.stepComponent.saveStepChanges();
+  }
+  
   loadStep(): void {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.step.component);
     const viewContainerRef = this.stepPlaceholder.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
     this.stepComponent = (<StepComponentContent>componentRef.instance);
-    if (this.stepComponent.validStep) {
-      this.stepComponent.validStep.subscribe((valid) => {
-        this.valid = valid === 'VALID';
+    if (this.stepComponent.contentChanged) {
+      this.stepComponent.contentChanged.subscribe(({ status, value }) => {
+        this.step.isValid = status === 'VALID';
+        this.step.setStepData(value);
       });
     }
     this.stepComponent.setActiveStep(this.active);
   }
   
   onNextClicked(): void {
+    this.saveCurrentChanges();
     this.onNext.emit(this.index);
   }
   
   onPreviousClicked(): void {
+    // TODO: check if step is valid before saving
+    this.saveCurrentChanges();
     this.onPrevious.emit(this.index);
   }
   
   onStepClicked(): void {
+    //this.saveCurrentChanges();
     // TODO: this.valid is the state of the step which you are navigating to, not the one
     // you're currently on...
-    if (this.valid) {
+    if (this.step.isValid) {
       this.onActivate.emit(this.index);
     }
   }
