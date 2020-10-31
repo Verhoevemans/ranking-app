@@ -6,7 +6,46 @@
     will be used to invite players to join the game (so don't make typos or the
     players will never receive their invitations).
   </p>
-  <form>
+  <form *ngIf="!loading">
+    <div [formGroup]="quizmaster">
+      <div class="row">
+        <div class="col form-group">
+          <label for="quizmaster-name">
+            Quizmaster name:
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="quizmaster-name"
+                 [formControlName]="'name'">
+        </div>
+        <div class="col form-group">
+          <label for="quizmaster-email">
+            Quizmaster e-mail:
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="quizmaster-email"
+                 [formControlName]="'email'">
+        </div>
+        <div class="col-1 form-group">
+          <!-- Empty div for spacing -->
+        </div>
+      </div>
+      <div class="row form-check">
+        <div class="col">
+          <input type="checkbox"
+                 class="form-check-input"
+                 id="quizmaster-plays"
+                 [formControlName]="'participates'">
+          <label class="form-check-label" for="quizmaster-plays">
+            <em>The Quizmaster also participates in the game</em>
+            <i  class="las la-info-circle"
+                ngbTooltip="If the Quizmaster participates, he/she has to answer all the questions, and his/her name is selectable as possible answer in the game">
+            </i>
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="row justify-content-end">
       <div class="col-3">
         <button type="button" class="btn btn-primary btn-block" (click)="onAdd()">
@@ -15,7 +54,7 @@
       </div>
     </div>
     <div class="row align-items-end"
-         *ngFor="let player of playersForm.controls; let i = index">
+         *ngFor="let player of players.controls; let i = index">
       <ng-container [formGroup]="player">
         <div class="col form-group">
           <label for="name">
@@ -45,9 +84,6 @@
       </ng-container>
     </div>
   </form>
-  <p>
-    Form is valid: {{ playersForm.valid }}
-  </p>
 </ng-container>
 
 <ng-template #viewTemplate>

@@ -4,9 +4,13 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { StepComponentContent } from '../../shared/components/step/step.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { SetupService } from '../../shared/api/setup/setup.service';
+
+import { StepComponentContent } from '../../shared/components/step/step.model';
+
+import { AddPlayersService, AddPlayersState } from './add-players.service';
+import { Quizmaster } from '../../shared/models/quizmaster.model';
+import { Player } from '../../shared/models/player.model';
 
 @Component({
   selector: 'app-add-players',
@@ -18,12 +22,30 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   @Output() contentChanged = new EventEmitter<{ status: string, value: any }>();
   
   activeStep: boolean;
-  playersForm: FormArray;
+  loading: boolean;
+  playersForm: FormGroup;
 
-  constructor(private setupService: SetupService) { }
+  constructor(private addPlayersService: AddPlayersService) { }
+  
+  get players(): FormArray {
+    return this.playersForm.get('players') as FormArray;
+  }
+  
+  get quizmaster(): FormGroup {
+    return this.playersForm.get('quizmaster') as FormGroup;
+  }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.loading = true;
+    this.addPlayersService.getPlayersState()
+      .subscribe((state: AddPlayersState) => {
+        this.initializeForm(state?.quizmaster, state?.players);
+        this.loading = false;
+      }, (error) => {
+        console.error(error);
+        this.initializeForm();
+        this.loading = false;
+      });
   }
   
   setActiveStep(active: boolean): void {
@@ -31,35 +53,50 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   }
   
   saveStepChanges(): void {
-    const players = this.playersForm.value;
-    this.setupService.savePlayers(players).subscribe((response) => {
-      console.log('New players save successfully:', response);
+    this.addPlayersService.savePlayersState(this.playersForm.value).subscribe((response) => {
+      console.log('New players saved successfully:', response);
       // TODO: Stepper should show spinner on loading, only move to next step when save is successful
     });
   };
   
-  getParticipantFormGroup(name?, email?): FormGroup {
+  getParticipantFormGroup(player?: Player): FormGroup {
     return new FormGroup({
-      'name': new FormControl(name, Validators.required),
-      'email': new FormControl(email, [Validators.required, Validators.email])
+      'name': new FormControl(player?.name, Validators.required),
+      'email': new FormControl(player?.email, [Validators.required, Validators.email])
     });
   }
   
-  initializeForm(): void {
-    this.playersForm = new FormArray([]);
-    this.playersForm.push(this.getParticipantFormGroup());
+  initializeForm(quizmaster?: Quizmaster, players?: Player[]): void {
+    this.playersForm = new FormGroup({
+      quizmaster: new FormGroup({
+        name: new FormControl(quizmaster?.name, Validators.required),
+        email: new FormControl(quizmaster?.email, Validators.required),
+        participates: new FormControl(quizmaster?.participates !== undefined ? quizmaster?.participates : true)
+      }),
+      players: new FormArray([])
+    });
+    
+    if (players) {
+      players.forEach((player) => {
+        this.players.push(this.getParticipantFormGroup(player));
+      });
+      this.contentChanged.emit({ status: this.playersForm.status, value: this.playersForm.value });
+    } else {
+      this.players.push(this.getParticipantFormGroup());
+    }
+    
     this.playersForm.valueChanges.subscribe((value) => {
-      this.contentChanged.emit({ status: this.playersForm.status, value })
+      this.contentChanged.emit({ status: this.playersForm.status, value });
     });
   }
   
   onAdd(): void {
-    this.playersForm.push(this.getParticipantFormGroup());
+    this.players.insert(0, this.getParticipantFormGroup());
   }
   
   onDelete(index: number): void {
-    this.playersForm.removeAt(index);
-    if (this.playersForm.length === 0) {
+    this.players.removeAt(index);
+    if (this.players.length === 0) {
       this.onAdd();
     }
   }

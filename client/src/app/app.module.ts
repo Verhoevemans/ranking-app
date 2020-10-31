@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,18 +17,19 @@ import { AddQuestionsComponent } from './setup/add-questions/add-questions.compo
 import { ConfigurationComponent } from './setup/configuration/configuration.component';
 import { CompletedComponent } from './setup/completed/completed.component';
 import { SetupService } from './shared/api/setup/setup.service';
+import { AddPlayersService } from './setup/add-players/add-players.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SetupComponent,
-    RankComponent,
-    PlayComponent,
-    HomeComponent,
     AddPlayersComponent,
     AddQuestionsComponent,
+    CompletedComponent,
     ConfigurationComponent,
-    CompletedComponent
+    HomeComponent,
+    PlayComponent,
+    RankComponent,
+    SetupComponent
   ],
   imports: [
     AppRoutingModule,
@@ -35,9 +37,11 @@ import { SetupService } from './shared/api/setup/setup.service';
     ComponentsModule,
     FormsModule,
     HttpClientModule,
+    NgbTooltipModule,
     ReactiveFormsModule
   ],
   providers: [
+    AddPlayersService,
     GameService,
     SetupService
   ],

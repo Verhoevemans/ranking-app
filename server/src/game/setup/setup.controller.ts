@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { PlayerDto } from './dto/player.dto';
+
+import { PlayerSetupDto } from './dto/player-setup.dto';
 import { SetupService } from './setup.service';
 
 // TODO: use NestJs Router:
@@ -13,17 +14,16 @@ export class SetupController {
   @Get('test')
   test(): string {
     Logger.log('test()');
-    
     return 'endpoint to the game/setup controller'
   }
   
   @Get('players')
-  getPlayers(): PlayerDto[] {
+  getPlayers(): PlayerSetupDto {
     return this.setupService.getPlayers();
   }
   
   @Post('players')
-  setPlayers(@Body() players: PlayerDto[]): PlayerDto[] {
+  setPlayers(@Body() players: PlayerSetupDto): PlayerSetupDto {
     this.setupService.addPLayers(players);
     return this.setupService.getPlayers();
   }
