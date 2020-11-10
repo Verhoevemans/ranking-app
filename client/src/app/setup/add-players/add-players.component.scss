@@ -3,10 +3,15 @@
 
   .form-check-input, .form-check-label {
     cursor: pointer;
+    margin-bottom: 1em;
 
     .la-info-circle {
       cursor: auto;
       margin-left: .4em;
     }
+  }
+
+  .player-data:last-child {
+    margin-bottom: 1rem;
   }
 }

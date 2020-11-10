@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { StepComponentContent } from '../../shared/components/step/step.model';
+import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
 
 import { AddPlayersService, AddPlayersState } from './add-players.service';
 import { Quizmaster } from '../../shared/models/quizmaster.model';
@@ -18,19 +18,19 @@ import { Player } from '../../shared/models/player.model';
   styleUrls: ['./add-players.component.scss']
 })
 export class AddPlayersComponent implements OnInit, StepComponentContent {
-  
+
   @Output() contentChanged = new EventEmitter<{ status: string, value: any }>();
-  
+
   activeStep: boolean;
   loading: boolean;
   playersForm: FormGroup;
 
   constructor(private addPlayersService: AddPlayersService) { }
-  
+
   get players(): FormArray {
     return this.playersForm.get('players') as FormArray;
   }
-  
+
   get quizmaster(): FormGroup {
     return this.playersForm.get('quizmaster') as FormGroup;
   }
@@ -47,25 +47,25 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
         this.loading = false;
       });
   }
-  
+
   setActiveStep(active: boolean): void {
     this.activeStep = active;
   }
-  
+
   saveStepChanges(): void {
     this.addPlayersService.savePlayersState(this.playersForm.value).subscribe((response) => {
       console.log('New players saved successfully:', response);
       // TODO: Stepper should show spinner on loading, only move to next step when save is successful
     });
-  };
-  
+  }
+
   getParticipantFormGroup(player?: Player): FormGroup {
     return new FormGroup({
       'name': new FormControl(player?.name, Validators.required),
       'email': new FormControl(player?.email, [Validators.required, Validators.email])
     });
   }
-  
+
   initializeForm(quizmaster?: Quizmaster, players?: Player[]): void {
     this.playersForm = new FormGroup({
       quizmaster: new FormGroup({
@@ -75,7 +75,7 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
       }),
       players: new FormArray([])
     });
-    
+
     if (players) {
       players.forEach((player) => {
         this.players.push(this.getParticipantFormGroup(player));
@@ -84,16 +84,16 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
     } else {
       this.players.push(this.getParticipantFormGroup());
     }
-    
+
     this.playersForm.valueChanges.subscribe((value) => {
       this.contentChanged.emit({ status: this.playersForm.status, value });
     });
   }
-  
+
   onAdd(): void {
     this.players.insert(0, this.getParticipantFormGroup());
   }
-  
+
   onDelete(index: number): void {
     this.players.removeAt(index);
     if (this.players.length === 0) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { StepComponentContent } from '../../shared/components/step/step.model';
+import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
 
 @Component({
   selector: 'app-completed',
@@ -7,14 +7,14 @@ import { StepComponentContent } from '../../shared/components/step/step.model';
   styleUrls: ['./completed.component.scss']
 })
 export class CompletedComponent implements OnInit, StepComponentContent {
-  
+
   activeStep: boolean;
 
   constructor() { }
 
   ngOnInit(): void {
   }
-  
+
   setActiveStep(active: boolean): void {
     this.activeStep = active;
   }

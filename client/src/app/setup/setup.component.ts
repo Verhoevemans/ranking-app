@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { GameService } from '../shared/api/game/game.service';
-import { Step } from '../shared/components/step/step.model';
+import { Step } from '../shared/components/stepper/step/step.model';
 
 import { AddPlayersComponent } from './add-players/add-players.component';
 import { AddQuestionsComponent } from './add-questions/add-questions.component';
@@ -15,7 +15,7 @@ import { ConfigurationComponent } from './configuration/configuration.component'
   styleUrls: ['./setup.component.scss']
 })
 export class SetupComponent implements OnInit {
-  
+
   steps: Step[];
 
   constructor(private gameService: GameService, private route: ActivatedRoute) { }
@@ -25,7 +25,7 @@ export class SetupComponent implements OnInit {
       const gameId = this.route.snapshot.paramMap.get('game-id');
       this.gameService.setGameId(+gameId);
     }
-    
+
     this.steps = [
       new Step('Invite players', 'active', AddPlayersComponent),
       new Step('Add Questions', 'inactive', AddQuestionsComponent),

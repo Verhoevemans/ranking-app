@@ -18,17 +18,17 @@ import { StepDirective } from './step.directive';
   styleUrls: ['./step.component.scss']
 })
 export class StepComponent implements OnInit, OnChanges {
-  
+
   @Input() active: boolean;
   @Input() index: number;
   @Input() step: Step;
-  
+
   @Output() onActivate = new EventEmitter<number>();
   @Output() onNext = new EventEmitter<number>();
   @Output() onPrevious = new EventEmitter<number>();
-  
+
   @ViewChild(StepDirective, { static: true }) stepPlaceholder: StepDirective;
-  
+
   stepComponent: StepComponentContent;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
@@ -36,17 +36,17 @@ export class StepComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.loadStep();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.active && !changes.active.firstChange) {
       this.stepComponent.setActiveStep(changes.active.currentValue);
     }
   }
-  
+
   saveCurrentChanges(): void {
     this.stepComponent.saveStepChanges();
   }
-  
+
   loadStep(): void {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.step.component);
     const viewContainerRef = this.stepPlaceholder.viewContainerRef;
@@ -61,25 +61,20 @@ export class StepComponent implements OnInit, OnChanges {
     }
     this.stepComponent.setActiveStep(this.active);
   }
-  
+
   onNextClicked(): void {
     this.saveCurrentChanges();
     this.onNext.emit(this.index);
   }
-  
+
   onPreviousClicked(): void {
-    // TODO: check if step is valid before saving
-    this.saveCurrentChanges();
     this.onPrevious.emit(this.index);
   }
-  
+
   onStepClicked(): void {
-    //this.saveCurrentChanges();
     // TODO: this.valid is the state of the step which you are navigating to, not the one
     // you're currently on...
-    if (this.step.isValid) {
-      this.onActivate.emit(this.index);
-    }
+    this.onActivate.emit(this.index);
   }
 
 }

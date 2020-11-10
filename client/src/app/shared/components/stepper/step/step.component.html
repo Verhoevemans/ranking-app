@@ -13,12 +13,12 @@
   <ng-template stepPlaceholder></ng-template>
 
   <div class="row step-btn-active" *ngIf="step.status === 'active' && !step.isLast">
-    <div class="col-2">
+    <div class="col-md-2 col-sm-6">
       <button class="btn btn-primary" (click)="onNextClicked()" [disabled]="!step.isValid">
         Next
       </button>
     </div>
-    <div class="col-2" *ngIf="index !== 0">
+    <div class="col-md-2 col-sm-6" *ngIf="index !== 0">
       <button class="btn btn-outline-primary" (click)="onPreviousClicked()">
         Previous
       </button>

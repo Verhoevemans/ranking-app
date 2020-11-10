@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { StepperComponent  } from './stepper/stepper.component';
 import { CommonModule } from '@angular/common';
-import { StepComponent } from './step/step.component';
-import { StepDirective } from './step/step.directive';
+import { StepComponent } from './stepper/step/step.component';
+import { StepDirective } from './stepper/step/step.directive';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,6 @@ import { StepDirective } from './step/step.directive';
   ],
   exports: [
     CommonModule,
-    StepComponent,
     StepperComponent
   ],
   imports: [

@@ -9,7 +9,7 @@
   <form *ngIf="!loading">
     <div [formGroup]="quizmaster">
       <div class="row">
-        <div class="col form-group">
+        <div class="col-md-5 col-sm-12 form-group">
           <label for="quizmaster-name">
             Quizmaster name:
           </label>
@@ -18,7 +18,7 @@
                  id="quizmaster-name"
                  [formControlName]="'name'">
         </div>
-        <div class="col form-group">
+        <div class="col-md-5 col-sm-12 form-group">
           <label for="quizmaster-email">
             Quizmaster e-mail:
           </label>
@@ -27,12 +27,12 @@
                  id="quizmaster-email"
                  [formControlName]="'email'">
         </div>
-        <div class="col-1 form-group">
+        <div class="col-md-2 form-group">
           <!-- Empty div for spacing -->
         </div>
       </div>
       <div class="row form-check">
-        <div class="col">
+        <div class="col-sm-12">
           <input type="checkbox"
                  class="form-check-input"
                  id="quizmaster-plays"
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="row justify-content-end">
-      <div class="col-3">
+      <div class="col-md-3 col-sm-9">
         <button type="button" class="btn btn-primary btn-block" (click)="onAdd()">
           + Add Player
         </button>
@@ -56,7 +56,7 @@
     <div class="row align-items-end"
          *ngFor="let player of players.controls; let i = index">
       <ng-container [formGroup]="player">
-        <div class="col form-group">
+        <div class="col-md-5 col-sm-12 form-group">
           <label for="name">
             Player name:
           </label>
@@ -65,7 +65,7 @@
                  id="name"
                  [formControlName]="'name'">
         </div>
-        <div class="col form-group">
+        <div class="col-md-5 col-sm-12 form-group">
           <label for="e-mail">
             Player e-mail:
           </label>
@@ -74,10 +74,10 @@
                  id="e-mail"
                  [formControlName]="'email'">
         </div>
-        <div class="col-1 form-group">
+        <div class="col-md-2 col-sm-12 form-group">
           <button type="button"
                   (click)="onDelete(i)"
-                  class="btn btn-outline-secondary btn-block">
+                  class="btn btn-secondary btn-block">
             X
           </button>
         </div>
@@ -87,5 +87,22 @@
 </ng-container>
 
 <ng-template #viewTemplate>
-  <p><i>Showing all players</i></p>
+  <p>Quizmaster</p>
+  <div class="row">
+    <div class="col-6">
+      <p><i>{{quizmaster.value.name}}</i></p>
+    </div>
+    <div class="col-6">
+      <p><i>{{quizmaster.value.email}}</i></p>
+    </div>
+  </div>
+  <p>Participants</p>
+  <div class="row player-data" *ngFor="let player of players.value">
+    <div class="col-6">
+      <span><i>{{player.name}}</i></span>
+    </div>
+    <div class="col-6">
+      <span><i>{{player.email}}</i></span>
+    </div>
+  </div>
 </ng-template>
