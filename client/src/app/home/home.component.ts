@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { GameService } from '../shared/api/game/game.service';
 
 @Component({
@@ -7,23 +8,23 @@ import { GameService } from '../shared/api/game/game.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  constructor(private router: Router, private gameService: GameService) { }
-
-  ngOnInit(): void {
+  constructor(private router: Router, private gameService: GameService) {
   }
   
-  onCreateGame(): void {
-    console.log('onCreateGame()');
-    
+  goToNewGame(): void {
     const newGame = {
       creator: 'Jeroen2'
     };
     
     this.gameService.createNewGame(newGame).subscribe((game) => {
-      console.log('game was created successfully! - ', game);
       this.router.navigate(['game', `${ game.id }`, 'setup']);
     });
+  }
+  
+  goToExistingGame(gameId: string): void {
+    // TODO: call BE to get game by Id
+    this.router.navigate(['game', `${ gameId }`, 'setup']);
   }
 }

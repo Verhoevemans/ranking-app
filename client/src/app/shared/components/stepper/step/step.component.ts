@@ -9,8 +9,9 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { Step, StepComponentContent } from './step.model';
+
 import { StepDirective } from './step.directive';
+import { Step, StepComponentContent } from './step.model';
 
 @Component({
   selector: 'app-step',
@@ -23,7 +24,7 @@ export class StepComponent implements OnInit, OnChanges {
   @Input() index: number;
   @Input() step: Step;
 
-  @Output() onActivate = new EventEmitter<number>();
+  @Output() onEdit = new EventEmitter<number>();
   @Output() onNext = new EventEmitter<number>();
   @Output() onPrevious = new EventEmitter<number>();
 
@@ -70,11 +71,9 @@ export class StepComponent implements OnInit, OnChanges {
   onPreviousClicked(): void {
     this.onPrevious.emit(this.index);
   }
-
-  onStepClicked(): void {
-    // TODO: this.valid is the state of the step which you are navigating to, not the one
-    // you're currently on...
-    this.onActivate.emit(this.index);
+  
+  onEditClicked(): void {
+    this.onEdit.emit(this.index);
   }
 
 }

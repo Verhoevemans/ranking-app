@@ -3,7 +3,8 @@
     What are the questions that participants should be ranked on? You can create a game
     with only custom questions. Or you can create a game with only predefined questions.
     Or you can make a combination of predefined and custom questions.
-
+  </p>
+  <p>
     When going for predefined questions, it helps to pick a setting. You don't want to play
     a family game and ask "who is the biggest slut". You don't want to play a game with colleagues
     and ask "who's farts stink the worst". The setting determines the questions. Pick a setting,
@@ -36,17 +37,39 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <!-- TODO: questions is an array -->
-      <label for="question">Question 1:</label>
-      <input type="text"
-             class="form-control"
-             id="question"
-             [formControlName]="'question'">
+    <div class="row justify-content-end">
+      <div class="col-md-3 col-sm-9">
+        <button type="button"
+                class="btn btn-primary btn-block"
+                (click)="onAddQuestion()">
+          + Add Question
+        </button>
+      </div>
+    </div>
+    <div class="row align-items-end" *ngFor="let question of questions.controls; let i = index">
+      <div class="col-sm-11 form-group">
+        <label for="question">Question {{i + 1}}:</label>
+        <input type="text"
+               class="form-control"
+               id="question"
+               [formControl]="questions.controls[i]">
+      </div>
+      <div class="col-sm-1 form-group">
+        <button type="button"
+                (click)="onDeleteQuestion(i)"
+                class="btn btn-secondary btn-block">
+          X
+        </button>
+      </div>
     </div>
   </form>
 </ng-container>
 
 <ng-template #viewTemplate>
-  <p><!-- TODO: here comes the data that users already entered --></p>
+  <p>Quiz Theme</p>
+  <p><i>{{theme.value}}</i></p>
+  <p>Questions</p>
+  <div *ngFor="let question of questions.value; let i = index">
+    <span>{{i + 1}} - <i>{{question}}</i></span>
+  </div>
 </ng-template>

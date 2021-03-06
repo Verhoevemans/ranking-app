@@ -2,6 +2,7 @@ import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 
 import { PlayerSetupDto } from './dto/player-setup.dto';
 import { SetupService } from './setup.service';
+import { QuestionSetupDto } from './dto/question-setup.dto';
 
 // TODO: use NestJs Router:
 // https://github.com/nestjsx/nest-router
@@ -28,11 +29,15 @@ export class SetupController {
     return this.setupService.getPlayers();
   }
   
+  @Get('questions')
+  getQuestions(): QuestionSetupDto {
+    return this.setupService.getQuestions();
+  }
+  
   @Post('questions')
-  setQuestions(@Body() questions: any[]): any[] {
-    Logger.log('SetupController setQuestions()');
-    // TODO: implement connection to service
-    return ['great', 'success'];
+  setQuestions(@Body() questions: QuestionSetupDto): QuestionSetupDto {
+    this.setupService.addQuestions(questions);
+    return this.setupService.getQuestions();
   }
   
 }

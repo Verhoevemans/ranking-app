@@ -7,10 +7,10 @@ import {
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
+import { Player } from '../../shared/models/player.model';
+import { Quizmaster } from '../../shared/models/quizmaster.model';
 
 import { AddPlayersService, AddPlayersState } from './add-players.service';
-import { Quizmaster } from '../../shared/models/quizmaster.model';
-import { Player } from '../../shared/models/player.model';
 
 @Component({
   selector: 'app-add-players',
@@ -91,7 +91,7 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   }
 
   onAdd(): void {
-    this.players.insert(0, this.getParticipantFormGroup());
+    this.players.push(this.getParticipantFormGroup());
   }
 
   onDelete(index: number): void {

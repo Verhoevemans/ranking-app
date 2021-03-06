@@ -18,6 +18,7 @@ import { ConfigurationComponent } from './setup/configuration/configuration.comp
 import { CompletedComponent } from './setup/completed/completed.component';
 import { SetupService } from './shared/api/setup/setup.service';
 import { AddPlayersService } from './setup/add-players/add-players.service';
+import { AddQuestionsService } from './setup/add-questions/add-questions.service';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { AddPlayersService } from './setup/add-players/add-players.service';
   ],
   providers: [
     AddPlayersService,
+    AddQuestionsService,
     GameService,
     SetupService
   ],

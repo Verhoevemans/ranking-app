@@ -1,6 +1,5 @@
 <section class="step-header"
-         [ngClass]="{ 'inactive': step.status !== 'active' }"
-         (click)="onStepClicked()">
+         [ngClass]="{ 'inactive': step.status !== 'active' }">
   <span class="header-counter">
     {{ index + 1}}
   </span>
@@ -25,7 +24,7 @@
     </div>
   </div>
   <div class="step-btn-inactive" *ngIf="step.status === 'completed' && !step.isLast">
-    <button class="btn btn-outline-secondary" (click)="onStepClicked()">
+    <button class="btn btn-outline-secondary" (click)="onEditClicked()">
       Edit
     </button>
   </div>

@@ -6,5 +6,11 @@
 
   .introduction {
     margin-top: 15vh;
+
+    .go-to-game {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      margin-top: 8vh;
+      padding-top: 5vh;
+    }
   }
 }

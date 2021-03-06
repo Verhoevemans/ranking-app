@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 
-import { Game } from './game.model';
+import { GameDto } from './game.dto';
 import { GameService } from './game.service';
 
 @Controller('game')
@@ -16,20 +16,25 @@ export class GameController {
   }
   
   @Get('get/:id')
-  getGame(@Param() params): Game {
+  getGame(@Param() params): Promise<GameDto> {
     Logger.log(`getGame() - ${ params.id }`);
     
     return this.gameService.find(params.id);
   }
   
-  @Post('create')
-  create(@Body() game: Game): Game {
-    Logger.log(`creating a new game for ${ game.creator }`);
-    const newGame = new Game();
-    newGame.id = Math.floor(Math.random() * 1000);
-    newGame.creator = game.creator;
-    this.gameService.add(newGame);
+  @Get('get-all')
+  getGames(@Param() params): Promise<GameDto[]> {
+    Logger.log(`getGames() - return all!!`);
     
-    return newGame;
+    return this.gameService.findAll();
+  }
+  
+  @Post('create')
+  create(@Body() game: GameDto): Promise<GameDto> {
+    Logger.log(`creating a new game for ${ game.creator }`);
+    const newGame = new GameDto();
+    newGame.id = Math.floor(Math.random() * (9000) + 1000);
+    newGame.creator = game.creator;
+    return this.gameService.create(newGame);
   }
 }

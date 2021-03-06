@@ -17,14 +17,15 @@ export class AddPlayersService {
   private addPlayersState: AddPlayersState;
   
   constructor (private httpClient: HttpClient,
-               private gameService: GameService) {}
+               private gameService: GameService) {
+  }
   
   getPlayersState(): Observable<AddPlayersState> {
     if (this.addPlayersState) {
       return of(this.addPlayersState);
     } else {
       const gameId = this.gameService.getGameId();
-      return this.httpClient.get<any>(`api/game/${gameId}/setup/players`);
+      return this.httpClient.get<AddPlayersState>(`api/game/${gameId}/setup/players`);
     }
   }
   
@@ -33,4 +34,5 @@ export class AddPlayersService {
     const gameId = this.gameService.getGameId();
     return this.httpClient.post<any>(`api/game/${gameId}/setup/players`, state);
   }
+  
 }
