@@ -66,10 +66,14 @@
 </ng-container>
 
 <ng-template #viewTemplate>
-  <p>Quiz Theme</p>
-  <p><i>{{theme.value}}</i></p>
-  <p>Questions</p>
-  <div *ngFor="let question of questions.value; let i = index">
-    <span>{{i + 1}} - <i>{{question}}</i></span>
-  </div>
+  <ng-container *ngIf="theme.value">
+    <p>Quiz Theme</p>
+    <p><i>{{theme.value}}</i></p>
+  </ng-container>
+  <ng-container *ngIf="questions.value && questions.value[0]">
+    <p>Questions</p>
+    <div *ngFor="let question of questions.value; let i = index">
+      <span>{{i + 1}} - <i>{{question}}</i></span>
+    </div>
+  </ng-container>
 </ng-template>
