@@ -18,13 +18,12 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
   loading: boolean;
   questionsForm: FormGroup;
 
-  constructor(private addQuestionsService: AddQuestionsService) {
-  }
-  
+  constructor(private addQuestionsService: AddQuestionsService) {}
+
   get theme(): FormControl {
     return this.questionsForm.get('theme') as FormControl;
   }
-  
+
   get questions(): FormArray {
     return this.questionsForm.get('questions') as FormArray;
   }
@@ -41,7 +40,7 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
         this.loading = false;
       }
     );
-    
+
     this.initializeForm();
   }
 
@@ -61,7 +60,7 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
       theme: new FormControl(theme, Validators.required),
       questions: new FormArray([])
     });
-    
+
     if (questions && questions.length > 0) {
       questions.forEach((question) => {
         this.questions.push(new FormControl(question, Validators.required));
@@ -70,21 +69,20 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
     } else {
       this.questions.push(new FormControl(null, Validators.required));
     }
-    
+
     this.questionsForm.valueChanges.subscribe((value) => {
       this.contentChanged.emit({ status: this.questionsForm.status, value });
     })
   }
-  
+
   onAddQuestion(): void {
     this.questions.push(new FormControl(null, Validators.required))
   }
-  
+
   onDeleteQuestion(index: number): void {
     this.questions.removeAt(index);
     if (this.questions.length === 0) {
       this.onAddQuestion();
     }
   }
-
 }

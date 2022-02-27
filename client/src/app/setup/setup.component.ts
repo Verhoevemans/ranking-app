@@ -18,7 +18,7 @@ export class SetupComponent implements OnInit {
 
   steps: Step[];
 
-  constructor(private gameService: GameService, private route: ActivatedRoute) { }
+  constructor(private gameService: GameService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     if (!this.gameService.getGameId()) {
@@ -26,6 +26,7 @@ export class SetupComponent implements OnInit {
       this.gameService.setGameId(+gameId);
     }
 
+    // TODO: consider whether I want to store the 'active' status in localStorage, so on reload you stay at the current active step
     this.steps = [
       new Step('Invite players', 'active', AddPlayersComponent),
       new Step('Add Questions', 'inactive', AddQuestionsComponent),
@@ -33,5 +34,4 @@ export class SetupComponent implements OnInit {
       new Step('Complete Setup', 'inactive', CompletedComponent, true, true)
     ];
   }
-
 }

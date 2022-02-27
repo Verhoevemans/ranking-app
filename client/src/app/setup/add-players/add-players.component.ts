@@ -25,7 +25,7 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   loading: boolean;
   playersForm: FormGroup;
 
-  constructor(private addPlayersService: AddPlayersService) { }
+  constructor(private addPlayersService: AddPlayersService) {}
 
   get players(): FormArray {
     return this.playersForm.get('players') as FormArray;
@@ -61,8 +61,8 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
 
   getParticipantFormGroup(player?: Player): FormGroup {
     return new FormGroup({
-      'name': new FormControl(player?.name, Validators.required),
-      'email': new FormControl(player?.email, [Validators.required, Validators.email])
+      name: new FormControl(player?.name, Validators.required),
+      email: new FormControl(player?.email, [Validators.required, Validators.email])
     });
   }
 
@@ -100,5 +100,4 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
       this.onAdd();
     }
   }
-
 }

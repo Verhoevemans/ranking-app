@@ -1,4 +1,5 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
+
 import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
 
 @Component({
@@ -10,7 +11,7 @@ export class CompletedComponent implements OnInit, StepComponentContent {
 
   activeStep: boolean;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
   }
@@ -18,5 +19,4 @@ export class CompletedComponent implements OnInit, StepComponentContent {
   setActiveStep(active: boolean): void {
     this.activeStep = active;
   }
-
 }

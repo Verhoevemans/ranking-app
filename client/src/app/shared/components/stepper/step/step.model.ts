@@ -11,21 +11,20 @@ export interface StepComponentContent {
 }
 
 export class Step {
-  
   // TODO: check whether step actually needs to hold the data...?
   private stepData: any;
-  
+
   constructor(public title: string,
               public status: StepStatus,
               public component: any,
               public isLast = false,
               public isValid = false) {
   }
-  
+
   getStepData(): void {
     return this.stepData;
   }
-  
+
   setStepData(data): void {
     this.stepData = data;
   }

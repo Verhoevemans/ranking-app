@@ -71,9 +71,8 @@ export class StepComponent implements OnInit, OnChanges {
   onPreviousClicked(): void {
     this.onPrevious.emit(this.index);
   }
-  
+
   onEditClicked(): void {
     this.onEdit.emit(this.index);
   }
-
 }

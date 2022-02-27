@@ -35,5 +35,4 @@ export class StepperComponent {
     this.steps[targetStep].status = 'active';
     this.activeStepIndex = targetStep;
   }
-
 }

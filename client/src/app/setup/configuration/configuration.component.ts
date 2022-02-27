@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
 import { FormGroup } from '@angular/forms';
+
+import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
 
 @Component({
   selector: 'app-configuration',
@@ -14,7 +15,7 @@ export class ConfigurationComponent implements OnInit, StepComponentContent {
   activeStep: boolean;
   configForm: FormGroup;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -27,8 +28,7 @@ export class ConfigurationComponent implements OnInit, StepComponentContent {
   initializeForm(): void {
     this.configForm = new FormGroup({});
     this.configForm.statusChanges.subscribe((status) => {
-      this.validStep.emit(status);
+      this.validStep.emit(status === 'VALID');
     })
   }
-
 }
