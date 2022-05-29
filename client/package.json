@@ -1,6 +1,8 @@
 {
-  "name": "ranking",
+  "name": "ranking-client",
   "version": "0.0.0",
+  "description": "A Ranking Game, client side application build with Angular",
+  "author": "Jeroen Verhoeven",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
