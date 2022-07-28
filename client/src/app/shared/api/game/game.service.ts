@@ -23,8 +23,8 @@ export class GameService {
     );
   }
 
-  getGame(id: number): Observable<Game> {
-    return this.httpClient.get<Game>(`api/game/get/${ id }`);
+  getGame(id: string): Observable<Game> {
+    return this.httpClient.get<Game>(`api/game/${ id }`);
   }
 
   getGameId(): number {

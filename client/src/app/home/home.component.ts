@@ -12,19 +12,21 @@ export class HomeComponent {
 
   constructor(private router: Router, private gameService: GameService) {
   }
-  
+
   goToNewGame(): void {
     const newGame = {
       creator: 'Jeroen2'
     };
-    
+
     this.gameService.createNewGame(newGame).subscribe((game) => {
       this.router.navigate(['game', `${ game.id }`, 'setup']);
     });
   }
-  
+
   goToExistingGame(gameId: string): void {
-    // TODO: call BE to get game by Id
-    this.router.navigate(['game', `${ gameId }`, 'setup']);
+    this.gameService.getGame(gameId).subscribe((response) => {
+      console.log('gotten game', response);
+      this.router.navigate(['game', `${ gameId }`, 'setup']);
+    });
   }
 }

@@ -11,13 +11,13 @@ export interface AddQuestionsState {
 
 @Injectable()
 export class AddQuestionsService {
-  
+
   private addQuestionsState: AddQuestionsState;
-  
+
   constructor (private httpClient: HttpClient,
                private gameService: GameService) {
   }
-  
+
   getQuestionsState(): Observable<AddQuestionsState> {
     if (this.addQuestionsState) {
       return of(this.addQuestionsState);
@@ -26,11 +26,10 @@ export class AddQuestionsService {
       return this.httpClient.get<AddQuestionsState>(`api/game/${gameId}/setup/questions`);
     }
   }
-  
+
   saveQuestionsState(state: AddQuestionsState): Observable<AddQuestionsState> {
     this.addQuestionsState = state;
     const gameId = this.gameService.getGameId();
     return this.httpClient.post<any>(`api/game/${gameId}/setup/questions`, state);
   }
-  
 }

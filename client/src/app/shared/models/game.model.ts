@@ -1,4 +1,7 @@
+import { User } from './user.model';
+
 export class Game {
   id: number;
-  creator: string;
+  questions: {}[];
+  users: User[];
 }
