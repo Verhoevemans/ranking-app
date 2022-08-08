@@ -12,20 +12,22 @@
   <ng-template stepPlaceholder></ng-template>
 
   <div class="row step-btn-active" *ngIf="step.status === 'active' && !step.isLast">
-    <div class="col-md-2 col-sm-6">
-      <button class="btn btn-primary" (click)="onNextClicked()" [disabled]="!step.isValid">
+    <div class="col-lg-2 col-md-3 col-6">
+      <button class="btn btn-primary btn-block" (click)="onNextClicked()" [disabled]="!step.isValid">
         Next
       </button>
     </div>
-    <div class="col-md-2 col-sm-6" *ngIf="index !== 0">
-      <button class="btn btn-outline-primary" (click)="onPreviousClicked()">
+    <div class="col-lg-2 col-md-3 col-6" *ngIf="index !== 0">
+      <button class="btn btn-outline-primary btn-block" (click)="onPreviousClicked()">
         Previous
       </button>
     </div>
   </div>
-  <div class="step-btn-inactive" *ngIf="step.status === 'completed' && !step.isLast">
-    <button class="btn btn-outline-secondary" (click)="onEditClicked()">
-      Edit
-    </button>
+  <div class="step-btn-inactive row justify-content-end" *ngIf="step.status === 'completed' && !step.isLast">
+    <div class="col-lg-2 col-md-3 col-6">
+      <button class="btn btn-outline-secondary btn-block" (click)="onEditClicked()">
+        Edit
+      </button>
+    </div>
   </div>
 </section>

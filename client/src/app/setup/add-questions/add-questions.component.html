@@ -6,7 +6,7 @@
   </p>
   <p>
     When going for predefined questions, it helps to pick a setting. You don't want to play
-    a family game and ask "who is the biggest slut". You don't want to play a game with colleagues
+    a family game and ask "who is the worst on dates". You don't want to play a game with colleagues
     and ask "who's farts stink the worst". The setting determines the questions. Pick a setting,
     and the predefined questions will be suggested accordingly.
   </p>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="row justify-content-end">
-      <div class="col-md-3 col-sm-9">
+      <div class="col-lg-3 col-md-4 col-6">
         <button type="button"
                 class="btn btn-primary btn-block"
                 (click)="onAddQuestion()">
@@ -47,14 +47,14 @@
       </div>
     </div>
     <div class="row align-items-end" *ngFor="let question of questions.controls; let i = index">
-      <div class="col-sm-11 form-group">
+      <div class="col-lg-11 col-md-10 form-group">
         <label for="question">Question {{i + 1}}:</label>
         <input type="text"
                class="form-control"
                id="question"
                [formControl]="questions.controls[i]">
       </div>
-      <div class="col-sm-1 form-group">
+      <div class="col-lg-1 col-md-2 form-group">
         <button type="button"
                 (click)="onDeleteQuestion(i)"
                 class="btn btn-secondary btn-block">

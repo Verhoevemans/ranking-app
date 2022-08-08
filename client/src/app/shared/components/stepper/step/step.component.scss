@@ -40,17 +40,8 @@
       min-height: 30px;
     }
 
-    button {
-      min-width: 120px;
-    }
-
     .step-btn-active {
-      padding-bottom: 12px;
-    }
-
-    .step-btn-inactive {
-      display: flex;
-      justify-content: flex-end;
+      padding: 36px 0 12px;
     }
   }
 }

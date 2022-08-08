@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
+import { Question } from '../../shared/models/question.model';
 
 import { AddQuestionsService, AddQuestionsState } from './add-questions.service';
 
@@ -49,13 +50,12 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
   }
 
   saveStepChanges() {
-    const questions = this.questionsForm.value;
-    this.addQuestionsService.saveQuestionsState(questions).subscribe((response) => {
+    this.addQuestionsService.saveQuestionsState(this.questionsForm.value).subscribe((response) => {
       console.log('New questions saved successfully:', response);
     })
   }
 
-  initializeForm(theme?: string, questions?: string[]): void {
+  initializeForm(theme?: string, questions?: Question[]): void {
     this.questionsForm = new FormGroup({
       theme: new FormControl(theme, Validators.required),
       questions: new FormArray([])
@@ -63,7 +63,7 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
 
     if (questions && questions.length > 0) {
       questions.forEach((question) => {
-        this.questions.push(new FormControl(question, Validators.required));
+        this.questions.push(new FormControl(question.title, Validators.required));
       });
       this.contentChanged.emit({ status: this.questionsForm.status, value: this.questionsForm.value });
     } else {
