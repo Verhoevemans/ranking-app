@@ -2,7 +2,7 @@ import express from 'express';
 
 const game = {
   id: 123,
-  users: [],
+  players: [],
   questions: []
 };
 

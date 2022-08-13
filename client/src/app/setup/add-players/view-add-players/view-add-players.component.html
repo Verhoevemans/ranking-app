@@ -1,0 +1,18 @@
+<p>Quizmaster</p>
+<div class="row">
+  <div class="col-6">
+    <p><i>{{quizmaster.name}}</i></p>
+  </div>
+  <div class="col-6">
+    <p><i>{{quizmaster.email}}</i></p>
+  </div>
+</div>
+<p>Participants</p>
+<div class="row player-data" *ngFor="let participant of participants">
+  <div class="col-6">
+    <span><i>{{participant.name}}</i></span>
+  </div>
+  <div class="col-6">
+    <span><i>{{participant.email}}</i></span>
+  </div>
+</div>

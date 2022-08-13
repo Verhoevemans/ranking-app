@@ -16,9 +16,11 @@ import { AddPlayersComponent } from './setup/add-players/add-players.component';
 import { AddQuestionsComponent } from './setup/add-questions/add-questions.component';
 import { ConfigurationComponent } from './setup/configuration/configuration.component';
 import { CompletedComponent } from './setup/completed/completed.component';
-import { SetupService } from './shared/api/setup/setup.service';
 import { AddPlayersService } from './setup/add-players/add-players.service';
 import { AddQuestionsService } from './setup/add-questions/add-questions.service';
+import { SetupService } from './shared/api/setup/setup.service';
+import { ViewAddPlayersComponent } from './setup/add-players/view-add-players/view-add-players.component';
+import { EditAddPlayersComponent } from './setup/add-players/edit-add-players/edit-add-players.component';
 
 @NgModule({
   declarations: [
@@ -27,10 +29,12 @@ import { AddQuestionsService } from './setup/add-questions/add-questions.service
     AddQuestionsComponent,
     CompletedComponent,
     ConfigurationComponent,
+    EditAddPlayersComponent,
     HomeComponent,
     PlayComponent,
     RankComponent,
-    SetupComponent
+    SetupComponent,
+    ViewAddPlayersComponent
   ],
   imports: [
     AppRoutingModule,

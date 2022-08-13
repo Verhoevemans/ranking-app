@@ -13,7 +13,7 @@ import { AddQuestionsService, AddQuestionsState } from './add-questions.service'
 })
 export class AddQuestionsComponent implements OnInit, StepComponentContent {
 
-  @Output() contentChanged = new EventEmitter<{ status: string, value: any }>();
+  @Output() contentChanged = new EventEmitter<string>();
 
   activeStep: boolean;
   loading: boolean;
@@ -65,13 +65,13 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
       questions.forEach((question) => {
         this.questions.push(new FormControl(question.title, Validators.required));
       });
-      this.contentChanged.emit({ status: this.questionsForm.status, value: this.questionsForm.value });
+      this.contentChanged.emit(this.questionsForm.status);
     } else {
       this.questions.push(new FormControl(null, Validators.required));
     }
 
     this.questionsForm.valueChanges.subscribe((value) => {
-      this.contentChanged.emit({ status: this.questionsForm.status, value });
+      this.contentChanged.emit(this.questionsForm.status);
     })
   }
 

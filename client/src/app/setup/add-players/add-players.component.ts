@@ -1,10 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { StepComponentContent } from '../../shared/components/stepper/step/step.model';
-import { User, UserRole } from '../../shared/models/user.model';
+import { Player } from '../../shared/models/player.model';
 
-import { AddPlayersService, AddPlayersState } from './add-players.service';
+import { AddPlayersService } from './add-players.service';
 
 @Component({
   selector: 'app-add-players',
@@ -13,33 +12,32 @@ import { AddPlayersService, AddPlayersState } from './add-players.service';
 })
 export class AddPlayersComponent implements OnInit, StepComponentContent {
 
-  @Output() contentChanged = new EventEmitter<{ status: string, value: any }>();
+  @Output() contentChanged = new EventEmitter<string>();
 
   activeStep: boolean;
   loading: boolean;
-  playersForm: FormGroup;
+  players: Player[];
 
   constructor(private addPlayersService: AddPlayersService) {}
-
-  get players(): FormArray {
-    return this.playersForm.get('players') as FormArray;
-  }
-
-  get quizmaster(): FormGroup {
-    return this.playersForm.get('quizmaster') as FormGroup;
-  }
 
   ngOnInit(): void {
     this.loading = true;
     this.addPlayersService.getPlayersState()
-      .subscribe((state: AddPlayersState) => {
-        this.initializeForm(state?.quizmaster, state?.players);
+      .subscribe((players: Player[]) => {
+        this.players = players || [];
         this.loading = false;
       }, (error) => {
         console.error(error);
-        this.initializeForm();
+        this.players = [];
         this.loading = false;
       });
+  }
+
+  onPlayersChanged(event: { formStatus: string, players?: Player[] }): void {
+    if (event.formStatus === 'VALID' && event.players) {
+      this.players = event.players;
+    }
+    this.contentChanged.emit(event.formStatus);
   }
 
   setActiveStep(active: boolean): void {
@@ -47,56 +45,10 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   }
 
   saveStepChanges(): void {
-    this.addPlayersService.savePlayersState(this.playersForm.value).subscribe((response) => {
+    console.log('saving changes', this.players);
+    this.addPlayersService.savePlayersState(this.players).subscribe((response) => {
       console.log(response.message);
       // TODO: Stepper should show spinner on loading, only move to next step when save is successful
     });
-  }
-
-  getParticipantFormGroup(player?: User): FormGroup {
-    return new FormGroup({
-      id: new FormControl(player?.id),
-      name: new FormControl(player?.name, Validators.required),
-      email: new FormControl(player?.email, [Validators.required, Validators.email]),
-      role: new FormControl(UserRole.PLAYER),
-      participates: new FormControl(true)
-    });
-  }
-
-  initializeForm(quizmaster?: User, players?: User[]): void {
-    this.playersForm = new FormGroup({
-      quizmaster: new FormGroup({
-        id: new FormControl(quizmaster?.id),
-        name: new FormControl(quizmaster?.name, Validators.required),
-        email: new FormControl(quizmaster?.email, Validators.required),
-        role: new FormControl(UserRole.QUIZMASTER),
-        participates: new FormControl(quizmaster?.participates !== undefined ? quizmaster?.participates : true)
-      }),
-      players: new FormArray([])
-    });
-
-    if (players.length > 0) {
-      players.forEach((player) => {
-        this.players.push(this.getParticipantFormGroup(player));
-      });
-      this.contentChanged.emit({ status: this.playersForm.status, value: this.playersForm.value });
-    } else {
-      this.players.push(this.getParticipantFormGroup());
-    }
-
-    this.playersForm.valueChanges.subscribe((value) => {
-      this.contentChanged.emit({ status: this.playersForm.status, value });
-    });
-  }
-
-  onAdd(): void {
-    this.players.push(this.getParticipantFormGroup());
-  }
-
-  onDelete(index: number): void {
-    this.players.removeAt(index);
-    if (this.players.length === 0) {
-      this.onAdd();
-    }
   }
 }

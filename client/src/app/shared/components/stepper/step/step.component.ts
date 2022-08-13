@@ -44,10 +44,6 @@ export class StepComponent implements OnInit, OnChanges {
     }
   }
 
-  saveCurrentChanges(): void {
-    this.stepComponent.saveStepChanges();
-  }
-
   loadStep(): void {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.step.component);
     const viewContainerRef = this.stepPlaceholder.viewContainerRef;
@@ -55,16 +51,15 @@ export class StepComponent implements OnInit, OnChanges {
     const componentRef = viewContainerRef.createComponent(componentFactory);
     this.stepComponent = (<StepComponentContent>componentRef.instance);
     if (this.stepComponent.contentChanged) {
-      this.stepComponent.contentChanged.subscribe(({ status, value }) => {
+      this.stepComponent.contentChanged.subscribe((status) => {
         this.step.isValid = status === 'VALID';
-        this.step.setStepData(value);
       });
     }
     this.stepComponent.setActiveStep(this.active);
   }
 
   onNextClicked(): void {
-    this.saveCurrentChanges();
+    this.stepComponent.saveStepChanges();
     this.onNext.emit(this.index);
   }
 

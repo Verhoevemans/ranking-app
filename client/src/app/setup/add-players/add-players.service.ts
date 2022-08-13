@@ -1,15 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { GameService } from '../../shared/api/game/game.service';
-import { User, UserRole } from '../../shared/models/user.model';
-
-export interface AddPlayersState {
-  quizmaster: User,
-  players: User[]
-}
+import { Player } from '../../shared/models/player.model';
 
 interface SavePlayersResponse {
   message: string
@@ -18,48 +13,31 @@ interface SavePlayersResponse {
 @Injectable()
 export class AddPlayersService {
 
-  private addPlayersState: AddPlayersState;
+  private players: Player[];
 
   constructor (private httpClient: HttpClient,
                private gameService: GameService) {
   }
 
-  getPlayersState(): Observable<AddPlayersState> {
-    if (this.addPlayersState) {
-      return of(this.addPlayersState);
+  getPlayersState(): Observable<Player[]> {
+    if (this.players) {
+      return of(this.players);
     } else {
       const gameId = this.gameService.getGameId();
       return this.httpClient
-        .get<User[]>(`api/game/${gameId}/setup/players`)
+        .get<Player[]>(`api/game/${gameId}/setup/players`)
         .pipe(
-          map((users) => this.mapUsersToState(users)),
-          tap((addPlayersState) => {
-            this.addPlayersState = addPlayersState;
+          tap((players) => {
+            this.players = players;
           })
         );
     }
   }
 
-  savePlayersState(state: AddPlayersState): Observable<SavePlayersResponse> {
-    this.addPlayersState = state;
+  savePlayersState(players: Player[]): Observable<SavePlayersResponse> {
+    this.players = players;
     const gameId = this.gameService.getGameId();
-    const users = this.mapStateToUsers(state);
 
-    return this.httpClient.post<SavePlayersResponse>(`api/game/${gameId}/setup/players`, { users });
-  }
-
-  private mapStateToUsers(state: AddPlayersState): User[] {
-    const users = [];
-    users.push(state.quizmaster);
-    users.push(...state.players);
-
-    return users;
-  }
-
-  private mapUsersToState(users: User[]): AddPlayersState {
-    const quizmaster = users.find(user => user.role === UserRole.QUIZMASTER);
-    const players = users.filter(user => user.role === UserRole.PLAYER);
-
-    return { quizmaster, players };
+    return this.httpClient.post<SavePlayersResponse>(`api/game/${gameId}/setup/players`, { players });
   }
 }

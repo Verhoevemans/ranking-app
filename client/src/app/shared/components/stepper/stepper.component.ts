@@ -13,7 +13,7 @@ export class StepperComponent {
   activeStepIndex = 0;
 
   goToNextStep(currentActiveStep: number): void {
-    console.log('goToNextStep()', this.steps[this.activeStepIndex].getStepData());
+    console.log('goToNextStep()', this.steps[currentActiveStep].isValid);
     this.steps[currentActiveStep].status = 'completed';
     this.steps[currentActiveStep + 1].status = 'active';
     this.activeStepIndex = currentActiveStep + 1;

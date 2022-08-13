@@ -1,7 +1,7 @@
-import { User } from './user.model';
+import { Player } from './player.model';
 
 export class Game {
   id: number;
   questions: {}[];
-  users: User[];
+  players: Player[];
 }

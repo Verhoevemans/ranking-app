@@ -1,12 +1,12 @@
-export enum UserRole {
+export enum PlayerRole {
   QUIZMASTER= 'quizmaster',
-  PLAYER = 'player'
+  PARTICIPANT = 'participant'
 }
 
-export class User {
+export class Player {
   id?: number;
   name: string;
   email: string;
-  role: UserRole;
+  role: PlayerRole;
   participates: boolean;
 }

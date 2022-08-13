@@ -1,108 +1,13 @@
-<ng-container *ngIf="activeStep; else viewTemplate">
-
-  <!-- TODO: split this HTML up in two new components: view and edit -->
-
-  <p>
-    First, setup the participants of the game. Enter their name, which will be used to
-    identify the players for ranking purposes (so don't use nicknames that won't be
-    recognized, or people won't be ranked properly). Enter their e-mail address, which
-    will be used to invite players to join the game (so don't make typos or the
-    players will never receive their invitations).
-  </p>
-  <form *ngIf="!loading">
-    <div [formGroup]="quizmaster">
-      <div class="row">
-        <div class="col-md-5 form-group">
-          <label for="quizmaster-name">
-            Quizmaster name:
-          </label>
-          <input type="text"
-                 class="form-control"
-                 id="quizmaster-name"
-                 [formControlName]="'name'">
-        </div>
-        <div class="col-md-7 form-group">
-          <label for="quizmaster-email">
-            Quizmaster e-mail:
-          </label>
-          <input type="text"
-                 class="form-control"
-                 id="quizmaster-email"
-                 [formControlName]="'email'">
-        </div>
-      </div>
-      <div class="row form-check">
-        <div class="col-12">
-          <input type="checkbox"
-                 class="form-check-input"
-                 id="quizmaster-plays"
-                 [formControlName]="'participates'">
-          <label class="form-check-label" for="quizmaster-plays">
-            <em>The Quizmaster also participates in the game</em>
-            <i  class="las la-info-circle"
-                ngbTooltip="If the Quizmaster participates, he/she has to answer all the questions, and his/her name is selectable as possible answer in the game. But the Quizmaster cannot participate in the final game round">
-            </i>
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-end">
-      <div class="col-lg-3 col-md-4 col-6">
-        <button type="button" class="btn btn-primary btn-block" (click)="onAdd()">
-          + Add Player
-        </button>
-      </div>
-    </div>
-    <div class="row align-items-end"
-         *ngFor="let player of players.controls; let i = index">
-      <ng-container [formGroup]="player">
-        <div class="col-md-5 form-group">
-          <label for="name">
-            Player name:
-          </label>
-          <input type="text"
-                 class="form-control"
-                 id="name"
-                 [formControlName]="'name'">
-        </div>
-        <div class="col-lg-6 col-md-5 form-group">
-          <label for="e-mail">
-            Player e-mail:
-          </label>
-          <input type="text"
-                 class="form-control"
-                 id="e-mail"
-                 [formControlName]="'email'">
-        </div>
-        <div class="col-lg-1 col-md-2 form-group">
-          <button type="button"
-                  (click)="onDelete(i)"
-                  class="btn btn-secondary btn-block">
-            X
-          </button>
-        </div>
-      </ng-container>
-    </div>
-  </form>
-</ng-container>
-
-<ng-template #viewTemplate>
-  <p>Quizmaster</p>
-  <div class="row">
-    <div class="col-6">
-      <p><i>{{quizmaster.value.name}}</i></p>
-    </div>
-    <div class="col-6">
-      <p><i>{{quizmaster.value.email}}</i></p>
-    </div>
-  </div>
-  <p>Participants</p>
-  <div class="row player-data" *ngFor="let player of players.value">
-    <div class="col-6">
-      <span><i>{{player.name}}</i></span>
-    </div>
-    <div class="col-6">
-      <span><i>{{player.email}}</i></span>
-    </div>
-  </div>
-</ng-template>
+<div *ngIf="loading">
+  <span>Loading data...</span>
+</div>
+<div *ngIf="!loading">
+  <ng-container *ngIf="activeStep; else view">
+    <app-edit-add-players [players]="players"
+                          (playersChanged)="onPlayersChanged($event)">
+    </app-edit-add-players>
+  </ng-container>
+  <ng-template #view>
+    <app-view-add-players [players]="players"></app-view-add-players>
+  </ng-template>
+</div>
