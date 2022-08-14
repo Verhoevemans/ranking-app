@@ -22,7 +22,7 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
 
   ngOnInit(): void {
     this.loading = true;
-    this.addPlayersService.getPlayersState()
+    this.addPlayersService.getPlayers()
       .subscribe((players: Player[]) => {
         this.players = players || [];
         this.loading = false;
@@ -33,22 +33,21 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
       });
   }
 
-  onPlayersChanged(event: { formStatus: string, players?: Player[] }): void {
-    if (event.formStatus === 'VALID' && event.players) {
-      this.players = event.players;
-    }
-    this.contentChanged.emit(event.formStatus);
+  saveStepChanges(): void {
+    this.addPlayersService.savePlayers(this.players).subscribe((response) => {
+      console.log(response.message);
+      // TODO: Stepper should show spinner on loading, only move to next step when save is successful
+    });
   }
 
   setActiveStep(active: boolean): void {
     this.activeStep = active;
   }
 
-  saveStepChanges(): void {
-    console.log('saving changes', this.players);
-    this.addPlayersService.savePlayersState(this.players).subscribe((response) => {
-      console.log(response.message);
-      // TODO: Stepper should show spinner on loading, only move to next step when save is successful
-    });
+  onPlayersChanged(event: { formStatus: string, players?: Player[] }): void {
+    if (event.formStatus === 'VALID' && event.players) {
+      this.players = event.players;
+    }
+    this.contentChanged.emit(event.formStatus);
   }
 }

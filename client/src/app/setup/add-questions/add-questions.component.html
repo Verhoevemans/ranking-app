@@ -1,79 +1,13 @@
-<ng-container *ngIf="activeStep; else viewTemplate">
-  <p>
-    What are the questions that participants should be ranked on? You can create a game
-    with only custom questions. Or you can create a game with only predefined questions.
-    Or you can make a combination of predefined and custom questions.
-  </p>
-  <p>
-    When going for predefined questions, it helps to pick a setting. You don't want to play
-    a family game and ask "who is the worst on dates". You don't want to play a game with colleagues
-    and ask "who's farts stink the worst". The setting determines the questions. Pick a setting,
-    and the predefined questions will be suggested accordingly.
-  </p>
-  <form [formGroup]="questionsForm">
-    <div class="form-group">
-      <label for="theme">Theme:</label>
-      <select class="form-control"
-              id="theme"
-              [formControlName]="'theme'">
-        <option>
-          Select...
-        </option>
-        <option>
-          Work Colleagues - Office Appropriate
-        </option>
-        <option>
-          Work Colleagues - Edgy
-        </option>
-        <option>
-          Family - All Ages
-        </option>
-        <option>
-          Friends - Friendly
-        </option>
-        <option>
-          Friends - Edgy
-        </option>
-      </select>
-    </div>
-
-    <div class="row justify-content-end">
-      <div class="col-lg-3 col-md-4 col-6">
-        <button type="button"
-                class="btn btn-primary btn-block"
-                (click)="onAddQuestion()">
-          + Add Question
-        </button>
-      </div>
-    </div>
-    <div class="row align-items-end" *ngFor="let question of questions.controls; let i = index">
-      <div class="col-lg-11 col-md-10 form-group">
-        <label for="question">Question {{i + 1}}:</label>
-        <input type="text"
-               class="form-control"
-               id="question"
-               [formControl]="questions.controls[i]">
-      </div>
-      <div class="col-lg-1 col-md-2 form-group">
-        <button type="button"
-                (click)="onDeleteQuestion(i)"
-                class="btn btn-secondary btn-block">
-          X
-        </button>
-      </div>
-    </div>
-  </form>
-</ng-container>
-
-<ng-template #viewTemplate>
-  <ng-container *ngIf="theme.value">
-    <p>Quiz Theme</p>
-    <p><i>{{theme.value}}</i></p>
+<div *ngIf="loading">
+  <span>Loading data...</span>
+</div>
+<div *ngIf="!loading">
+  <ng-container *ngIf="activeStep; else view">
+    <app-edit-questions [questions]="questions"
+                        (questionsChanged)="onQuestionsChanged($event)">
+    </app-edit-questions>
   </ng-container>
-  <ng-container *ngIf="questions.value && questions.value[0]">
-    <p>Questions</p>
-    <div *ngFor="let question of questions.value; let i = index">
-      <span>{{i + 1}} - <i>{{question}}</i></span>
-    </div>
-  </ng-container>
-</ng-template>
+  <ng-template #view>
+    <app-view-questions [questions]="questions"></app-view-questions>
+  </ng-template>
+</div>

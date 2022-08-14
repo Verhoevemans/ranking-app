@@ -19,7 +19,7 @@ export class AddPlayersService {
                private gameService: GameService) {
   }
 
-  getPlayersState(): Observable<Player[]> {
+  getPlayers(): Observable<Player[]> {
     if (this.players) {
       return of(this.players);
     } else {
@@ -34,7 +34,7 @@ export class AddPlayersService {
     }
   }
 
-  savePlayersState(players: Player[]): Observable<SavePlayersResponse> {
+  savePlayers(players: Player[]): Observable<SavePlayersResponse> {
     this.players = players;
     const gameId = this.gameService.getGameId();
 

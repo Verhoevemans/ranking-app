@@ -6,42 +6,31 @@ import { map, tap } from 'rxjs/operators';
 import { GameService } from '../../shared/api/game/game.service';
 import { Question } from '../../shared/models/question.model';
 
-export interface AddQuestionsState {
-  // TODO: theme should not be part of this state...
-  theme: string,
-  questions: Question[];
-}
-
 @Injectable()
 export class AddQuestionsService {
 
-  private addQuestionsState: AddQuestionsState;
+  private questions: Question[];
 
   constructor (private httpClient: HttpClient,
                private gameService: GameService) {
   }
 
-  getQuestionsState(): Observable<AddQuestionsState> {
-    if (this.addQuestionsState) {
-      return of(this.addQuestionsState);
+  getQuestions(): Observable<Question[]> {
+    if (this.questions) {
+      return of(this.questions);
     } else {
       const gameId = this.gameService.getGameId();
       return this.httpClient.get<Question[]>(`api/game/${gameId}/setup/questions`)
         .pipe(
-          map(questions => {
-            return { questions, theme: 'Family - All Ages' };
-          }),
-          tap(questionsState => this.addQuestionsState = questionsState)
+          tap(questions => this.questions = questions)
         );
     }
   }
 
-  saveQuestionsState(state: AddQuestionsState): Observable<Question[]> {
-    this.addQuestionsState = state;
+  saveQuestions(questions: Question[]): Observable<Question[]> {
+    this.questions = questions;
     const gameId = this.gameService.getGameId();
-    const questions = state.questions.map(question => {
-      return { title: question };
-    });
+
     return this.httpClient.post<Question[]>(`api/game/${gameId}/setup/questions`, { questions });
   }
 }
