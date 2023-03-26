@@ -23,7 +23,7 @@ export class SetupComponent implements OnInit {
   ngOnInit(): void {
     if (!this.gameService.getGameId()) {
       const gameId = this.route.snapshot.paramMap.get('game-id');
-      this.gameService.setGameId(+gameId);
+      this.gameService.setGameId(gameId);
     }
 
     // TODO: consider whether I want to store the 'active' status in localStorage, so on reload you stay at the current active step

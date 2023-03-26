@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 
 import { GameService } from '../game/game.service';
 
+
+// DEPRECATED
+// Use players.service or questions.service instead
 @Injectable()
 export class SetupService {
-  
+
   constructor(private httpClient: HttpClient,
               private gameService: GameService) {}
-  
+
   saveQuestions(questions: any): Observable<any> {
     // TODO: create questions model
     const gameId = this.gameService.getGameId();

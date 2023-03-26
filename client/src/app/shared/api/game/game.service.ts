@@ -8,17 +8,19 @@ import { Game } from '../../models/game.model';
 @Injectable()
 export class GameService {
 
-  private gameId: number;
+  private gameId: string;
 
   constructor(private httpClient: HttpClient) {}
 
-  createNewGame(game): Observable<Game> {
+  createNewGame(): Observable<any> {
+    console.log('createNewGame()');
     return this.httpClient.post<Game>(
-      'api/game/create',
-      game
+      'api/game',
+      {}
     ).pipe(
-      tap((newGame) => {
-        this.gameId = newGame.id;
+      tap((response) => {
+        console.log('tap works');
+        this.gameId = response.data.id;
       })
     );
   }
@@ -27,11 +29,12 @@ export class GameService {
     return this.httpClient.get<Game>(`api/game/${ id }`);
   }
 
-  getGameId(): number {
+  getGameId(): string {
+    console.log('getGameId()', this.gameId);
     return this.gameId;
   }
 
-  setGameId(id: number): void {
+  setGameId(id: string): void {
     console.log('setGameId()', id);
     this.gameId = id;
   }

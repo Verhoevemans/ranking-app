@@ -1,6 +1,6 @@
 import { Player } from './player.model';
 
-export class Game {
+export interface Game {
   id: number;
   questions: {}[];
   players: Player[];

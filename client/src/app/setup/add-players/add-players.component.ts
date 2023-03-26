@@ -23,7 +23,8 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   ngOnInit(): void {
     this.loading = true;
     this.addPlayersService.getPlayers()
-      .subscribe((players: Player[]) => {
+      .subscribe((players) => {
+        console.log('Gotten players from API', players);
         this.players = players || [];
         this.loading = false;
       }, (error) => {

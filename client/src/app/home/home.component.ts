@@ -14,18 +14,15 @@ export class HomeComponent {
   }
 
   goToNewGame(): void {
-    const newGame = {
-      creator: 'Jeroen2'
-    };
-
-    this.gameService.createNewGame(newGame).subscribe((game) => {
-      this.router.navigate(['game', `${ game.id }`, 'setup']);
+    this.gameService.createNewGame().subscribe((response) => {
+      console.log('Created new game', response);
+      this.router.navigate(['game', `${ response.data.id }`, 'setup']);
     });
   }
 
   goToExistingGame(gameId: string): void {
     this.gameService.getGame(gameId).subscribe((response) => {
-      console.log('gotten game', response);
+      console.log('Retrieved existing game', response);
       this.router.navigate(['game', `${ gameId }`, 'setup']);
     });
   }

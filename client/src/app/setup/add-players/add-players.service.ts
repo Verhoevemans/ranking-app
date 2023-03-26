@@ -1,10 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { GameService } from '../../shared/api/game/game.service';
 import { Player } from '../../shared/models/player.model';
+
+interface GetPlayersResponse {
+  success: boolean,
+  data: Player[]
+}
 
 interface SavePlayersResponse {
   message: string
@@ -23,10 +28,12 @@ export class AddPlayersService {
     if (this.players) {
       return of(this.players);
     } else {
+      console.log('getPlayers() - using the API');
       const gameId = this.gameService.getGameId();
       return this.httpClient
-        .get<Player[]>(`api/game/${gameId}/setup/players`)
+        .get<GetPlayersResponse>(`api/game/${gameId}/setup/players`)
         .pipe(
+          map((response) => response.data),
           tap((players) => {
             this.players = players;
           })

@@ -1,54 +1,68 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
+
+import Game from '../../models/game.model';
+import Player from '../../models/player.model';
+import { Error, Schema, Types } from 'mongoose';
 
 type RequestParams = { gameId: string };
-
-const game = {
-  id: 123,
-  players: [
-    { id: null, name: 'Jeroen', email: 'jeroen@gmail.com', role: 'quizmaster', participates: true },
-    { id: null, name: 'Miranda', email: 'miranda@hotmail.com', role: 'participant', participates: true },
-    { id: null, name: 'Wouter', email: 'wouter@outlook.com', role: 'participant', participates: true },
-    { id: null, name: 'Peter', email: 'peter@yahoo.com', role: 'participant', participates: true }
-  ],
-  questions: new Array<Question>()
-};
-
-type Player = {
-  id: null,
-  email: string,
-  name: string,
-  role: 'participant' | 'quizmaster',
-  participates: boolean
-};
 
 type Question = {
   title: string
 };
 
 type PlayerRequestBody = {
-  players: Player[]
+  players: any
 };
 
 class SetupController {
-  public async getPlayers(req: express.Request, res: express.Response, next: express.NextFunction): Promise<express.Response> {
-    console.log('getPlayers()', game);
-    return res.status(200).json(game.players);
+  public async getPlayers(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    let players;
+
+    if (req.params.gameId) {
+      players = await Player.find({ game: req.params.gameId });
+    } else {
+      players = await Player.find();
+    }
+
+    return res.status(200).json({
+      success: true,
+      count: players.length,
+      data: players
+    });
+  }
+
+  public async setPlayers(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    //req.body.game = req.params.gameId;
+    //console.log(req.body.gameId);
+    console.log(req.body);
+
+    console.log(`setPlayers() - game-id: ${req.params.gameId} players: ${req.body}`);
+
+    req.body.players.forEach((player: any) => {
+      player.game = req.params.gameId;
+      //await Player.updateOne({ id: player.id }, player);
+    })
+
+    console.log(req.body);
+
+    await Player.deleteMany({ game: req.params.gameId });
+    const players = await Player.insertMany(req.body.players);
+
+    console.log('Players created successfully', players);
+
+    return res.status(200).json({
+      success: true,
+      data: players
+    });
   }
   
-  public async setPlayers(req: express.Request, res: express.Response, next: express.NextFunction): Promise<express.Response> {
-    const body = req.body as PlayerRequestBody;
-    console.log('setPlayers', body);
-    game.players = body.players;
-    return res.status(200).json({ message: 'Players were set successfully!' });
-  }
-  
-  public async getQuestions(req: express.Request, res: express.Response, next: express.NextFunction): Promise<express.Response> {
+  public async getQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
     const params = req.params as RequestParams;
-    return res.status(200).json(game.questions);
+    return res.status(200).json([]);
   }
   
-  public async setQuestions(req: express.Request, res: express.Response, next: express.NextFunction): Promise<express.Response> {
-    game.questions = req.body.questions;
+  public async setQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    //game.questions = req.body.questions;
     return res.status(200).json({ message: 'Questions were set successfully!' });
   }
 }
