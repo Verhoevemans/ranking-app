@@ -1,4 +1,6 @@
-<p>Questions</p>
+<ng-container *ngIf="questions && questions.length > 0">
+  <p>Questions</p>
+</ng-container>
 <div *ngFor="let question of questions; let i = index">
   <span>{{i + 1}} - <i>{{ question.title }}</i></span>
 </div>

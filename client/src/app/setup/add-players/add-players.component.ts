@@ -22,9 +22,8 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
 
   ngOnInit(): void {
     this.loading = true;
-    this.addPlayersService.getPlayers()
-      .subscribe((players) => {
-        console.log('Gotten players from API', players);
+    this.addPlayersService.getPlayers().subscribe(
+      (players) => {
         this.players = players || [];
         this.loading = false;
       }, (error) => {
@@ -35,10 +34,11 @@ export class AddPlayersComponent implements OnInit, StepComponentContent {
   }
 
   saveStepChanges(): void {
-    this.addPlayersService.savePlayers(this.players).subscribe((response) => {
-      console.log(response.message);
-      // TODO: Stepper should show spinner on loading, only move to next step when save is successful
-    });
+    this.addPlayersService.savePlayers(this.players)
+      .subscribe((players) => {
+        this.players = players;
+        // TODO: Stepper should show spinner on loading, only move to next step when save is successful
+      });
   }
 
   setActiveStep(active: boolean): void {

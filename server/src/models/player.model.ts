@@ -1,6 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 
-const PlayerSchema = new mongoose.Schema({
+export interface IPlayer {
+    _id: ObjectId;
+    id: string;
+    name: string;
+    email: string;
+    role: 'quizmaster' | 'participant';
+    game: ObjectId;
+}
+
+const PlayerSchema = new mongoose.Schema<IPlayer>({
     name: {
         type: String,
         required: [true, 'Please add a name'],
@@ -28,4 +37,4 @@ const PlayerSchema = new mongoose.Schema({
     toJSON: { virtuals: true }
 });
 
-export default mongoose.model('Player', PlayerSchema);
+export default mongoose.model<IPlayer>('Player', PlayerSchema);

@@ -1,20 +1,13 @@
-import express, { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-import Game from '../../models/game.model';
-import Player from '../../models/player.model';
-import { Error, Schema, Types } from 'mongoose';
-
-type RequestParams = { gameId: string };
-
-type Question = {
-  title: string
-};
-
-type PlayerRequestBody = {
-  players: any
-};
+import Player, { IPlayer } from '../../models/player.model';
+import Question from '../../models/question.model';
 
 class SetupController {
+  /*
+  * @description    Return all players for given Game ID
+  * @route          GET api/game/{game-id}/setup/players
+  */
   public async getPlayers(req: Request, res: Response, next: NextFunction): Promise<Response> {
     let players;
 
@@ -31,24 +24,41 @@ class SetupController {
     });
   }
 
+  /*
+  * @description    Update or create players for given Game ID
+  * @route          POST api/game/{game-id}/setup/players
+  */
   public async setPlayers(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    //req.body.game = req.params.gameId;
-    //console.log(req.body.gameId);
-    console.log(req.body);
+    const playersFromDatabase = await Player.find({ game: req.params.gameId });
+    const playersFromRequest = req.body.players;
 
-    console.log(`setPlayers() - game-id: ${req.params.gameId} players: ${req.body}`);
+    for (const existingPlayer of playersFromDatabase) {
+      let targetPlayer;
+      let targetIndex;
+      playersFromRequest.some((player: IPlayer, index: number) => {
+        if (player.id === existingPlayer.id) {
+          targetPlayer = player;
+          targetIndex = index;
+          return true;
+        }
+      });
 
-    req.body.players.forEach((player: any) => {
-      player.game = req.params.gameId;
-      //await Player.updateOne({ id: player.id }, player);
-    })
+      if (targetPlayer) {
+        // Player exists in DB and in Request: update
+        await Player.findByIdAndUpdate(existingPlayer._id, targetPlayer);
+        playersFromRequest.splice(targetIndex, 1);
+      } else {
+        // Player exists in DB but not in request: delete
+        await Player.deleteOne({ _id: existingPlayer._id });
+      }
+    }
 
-    console.log(req.body);
+    for (const newPlayer of playersFromRequest) {
+      // Player exists in request, but not in DB: create
+      await Player.create({ game: req.params.gameId, ...newPlayer });
+    }
 
-    await Player.deleteMany({ game: req.params.gameId });
-    const players = await Player.insertMany(req.body.players);
-
-    console.log('Players created successfully', players);
+    const players = await Player.find({ game: req.params.gameId });
 
     return res.status(200).json({
       success: true,
@@ -57,12 +67,16 @@ class SetupController {
   }
   
   public async getQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    const params = req.params as RequestParams;
-    return res.status(200).json([]);
+    const questions = await Question.find({ game: req.params.gameId });
+
+    return res.status(200).json({
+      success: true,
+      count: questions.length,
+      data: questions
+    });
   }
   
   public async setQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    //game.questions = req.body.questions;
     return res.status(200).json({ message: 'Questions were set successfully!' });
   }
 }

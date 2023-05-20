@@ -1,36 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { GameService } from '../../shared/api/game/game.service';
 import { Question } from '../../shared/models/question.model';
 
+interface QuestionsResponse {
+  success: boolean,
+  data: Question[]
+}
+
 @Injectable()
 export class AddQuestionsService {
-
-  private questions: Question[];
-
   constructor (private httpClient: HttpClient,
                private gameService: GameService) {
   }
 
   getQuestions(): Observable<Question[]> {
-    if (this.questions) {
-      return of(this.questions);
-    } else {
-      const gameId = this.gameService.getGameId();
-      return this.httpClient.get<Question[]>(`api/game/${gameId}/setup/questions`)
-        .pipe(
-          tap(questions => this.questions = questions)
-        );
-    }
+    const gameId = this.gameService.getGameId();
+    return this.httpClient
+      .get<QuestionsResponse>(`api/game/${gameId}/setup/questions`)
+      .pipe(
+        map(response => response.data)
+      );
   }
 
   saveQuestions(questions: Question[]): Observable<Question[]> {
-    this.questions = questions;
     const gameId = this.gameService.getGameId();
 
-    return this.httpClient.post<Question[]>(`api/game/${gameId}/setup/questions`, { questions });
+    return this.httpClient
+      .post<QuestionsResponse>(`api/game/${gameId}/setup/questions`, { questions })
+      .pipe(
+        map(response => response.data)
+      );
   }
 }

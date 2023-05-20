@@ -1,6 +1,15 @@
 import mongoose from 'mongoose';
 
-const GameSchema = new mongoose.Schema({
+import { IPlayer } from './player.model';
+import { IQuestion } from './question.model';
+
+export interface IGame {
+    title: string;
+    players: IPlayer[];
+    questions: IQuestion[];
+}
+
+const GameSchema = new mongoose.Schema<IGame>({
     title: {
         type: String
     }
@@ -16,4 +25,11 @@ GameSchema.virtual('players', {
     justOne: false
 });
 
-export default mongoose.model('Game', GameSchema);
+GameSchema.virtual('questions', {
+    ref: 'Question',
+    localField: '_id',
+    foreignField: 'game',
+    justOne: false
+});
+
+export default mongoose.model<IGame>('Game', GameSchema);
