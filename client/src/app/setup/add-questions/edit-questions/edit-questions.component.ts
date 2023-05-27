@@ -28,6 +28,13 @@ export class EditQuestionsComponent implements OnInit {
     this.initializeForm();
   }
 
+  getQuestionFormGroup(question?: Question): FormGroup {
+    return new FormGroup({
+      id: new FormControl(question?.id),
+      title: new FormControl(question?.title, Validators.required)
+    });
+  }
+
   initializeForm(): void {
     this.questionsForm = new FormGroup({
       theme: new FormControl('Family - All Ages', Validators.required),
@@ -36,24 +43,24 @@ export class EditQuestionsComponent implements OnInit {
 
     if (this.questions.length > 0) {
       this.questions.forEach((question) => {
-        this.questionsList.push(new FormControl(question.title, Validators.required));
+        this.questionsList.push(this.getQuestionFormGroup(question));
       });
       this.questionsChanged.emit({ formStatus: this.questionsForm.status });
     } else {
-      this.questionsList.push(new FormControl(null, Validators.required));
+      this.questionsList.push(this.getQuestionFormGroup());
     }
 
     this.questionsForm.valueChanges.subscribe((value) => {
       const questions = [];
       value.questions.forEach((question) => {
-        questions.push({ title: question });
+        questions.push(question);
       });
       this.questionsChanged.emit({ formStatus: this.questionsForm.status, questions });
     })
   }
 
   onAddQuestion(): void {
-    this.questionsList.push(new FormControl(null, Validators.required))
+    this.questionsList.push(this.getQuestionFormGroup());
   }
 
   onDeleteQuestion(index: number): void {

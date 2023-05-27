@@ -1,6 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 
 export interface IQuestion {
+    _id: ObjectId;
+    id: string;
     title: string;
     game: mongoose.Schema.Types.ObjectId;
 }

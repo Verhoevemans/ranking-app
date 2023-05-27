@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import Player, { IPlayer } from '../../models/player.model';
-import Question from '../../models/question.model';
+import Question, { IQuestion } from '../../models/question.model';
 
 class SetupController {
   /*
@@ -54,7 +54,7 @@ class SetupController {
     }
 
     for (const newPlayer of playersFromRequest) {
-      // Player exists in request, but not in DB: create
+      // Player exists in request but not in DB: create
       await Player.create({ game: req.params.gameId, ...newPlayer });
     }
 
@@ -65,7 +65,11 @@ class SetupController {
       data: players
     });
   }
-  
+
+  /*
+  * @description    Return all questions for given Game ID
+  * @route          GET api/game/{game-id}/setup/questions
+  */
   public async getQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
     const questions = await Question.find({ game: req.params.gameId });
 
@@ -75,9 +79,47 @@ class SetupController {
       data: questions
     });
   }
-  
+
+  /*
+  * @description    Update or create questions for given Game ID
+  * @route          POST api/game/{game-id}/setup/questions
+  */
   public async setQuestions(req: Request, res: Response, next: NextFunction): Promise<Response> {
-    return res.status(200).json({ message: 'Questions were set successfully!' });
+    const questionsFromDatabase = await Question.find({ game: req.params.gameId });
+    const questionsFromRequest = req.body.questions;
+
+    for (const existingQuestion of questionsFromDatabase) {
+      let targetQuestion;
+      let targetIndex;
+      questionsFromRequest.some((question: IQuestion, index: number) => {
+        if (question.id === existingQuestion.id) {
+          targetQuestion = question;
+          targetIndex = index;
+          return true;
+        }
+      });
+
+      if (targetQuestion) {
+        // Question exists in DB and in Request: update
+        await Question.findByIdAndUpdate(existingQuestion._id, targetQuestion);
+        questionsFromRequest.splice(targetIndex, 1);
+      } else {
+        // Question exists in DB but not in Request: delete
+        await Question.deleteOne({ _id: existingQuestion._id });
+      }
+    }
+
+    for (const newQuestion of questionsFromRequest) {
+      // Question exists in request but not in DB: create
+      await Question.create({ game: req.params.gameId, ...newQuestion });
+    }
+
+    const questions = await Question.find({ game: req.params.gameId });
+
+    return res.status(200).json({
+      success: true,
+      data: questions
+    });
   }
 }
 

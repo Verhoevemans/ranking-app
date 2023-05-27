@@ -28,6 +28,7 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
         this.loading = false;
       },
       (error) => {
+        console.error(error);
         this.questions = [];
         this.loading = false;
       }
@@ -35,9 +36,10 @@ export class AddQuestionsComponent implements OnInit, StepComponentContent {
   }
 
   saveStepChanges(): void {
-    this.addQuestionsService.saveQuestions(this.questions).subscribe((response) => {
-      console.log('New questions saved successfully:', response);
-    })
+    this.addQuestionsService.saveQuestions(this.questions)
+      .subscribe((questions) => {
+        this.questions = questions;
+    });
   }
 
   setActiveStep(active: boolean): void {

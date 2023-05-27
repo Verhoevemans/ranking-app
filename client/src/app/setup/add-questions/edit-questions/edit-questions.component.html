@@ -46,19 +46,21 @@
     </div>
   </div>
   <div class="row align-items-end" *ngFor="let question of questionsList.controls; let i = index">
-    <div class="col-lg-11 col-md-10 form-group">
-      <label for="question">Question {{i + 1}}:</label>
-      <input type="text"
-             class="form-control"
-             id="question"
-             [formControl]="question">
-    </div>
-    <div class="col-lg-1 col-md-2 form-group">
-      <button type="button"
-              (click)="onDeleteQuestion(i)"
-              class="btn btn-secondary btn-block">
-        X
-      </button>
-    </div>
+    <ng-container [formGroup]="question">
+      <div class="col-lg-11 col-md-10 form-group">
+        <label for="question">Question {{i + 1}}:</label>
+        <input type="text"
+               class="form-control"
+               id="question"
+               [formControlName]="'title'">
+      </div>
+      <div class="col-lg-1 col-md-2 form-group">
+        <button type="button"
+                (click)="onDeleteQuestion(i)"
+                class="btn btn-secondary btn-block">
+          X
+        </button>
+      </div>
+    </ng-container>
   </div>
 </form>
